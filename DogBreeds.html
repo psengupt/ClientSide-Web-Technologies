@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+	<head>
+		<h1 align = "center">Dog Breed Information</h1>
+		<hr>
+		<link
+		href="http://code.jquery.com/ui/1.10.4/themes/ui-lightness/jquery-ui.css"
+		rel="stylesheet">
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+		<script src="http://code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+		<script>
+         $(function() {
+            $( "#accordion-1" ).accordion({heightStyle: 'content'});
+         });
+      </script>
+	</head>
+	
+	<body>
+								
+		Choose a breed: <select id ="Breed" onchange = "onChange()"></select>
+		<br>
+		<br>
+		<h1 id="BreedName" ></h1>
+			
+			</script>
+		</h1>
+		<table>
+			<tr>
+				<td width="750px">
+				
+					<div id="accordion-1">
+					<h3>Description</h3>
+					<div id = "acc-Description"></div>
+					<h3>Origins</h3>
+					<div id = "acc-Origins"></div>
+					<h3>Right For You</h3>
+					<div id="acc-RightForYou"></div>
+					</div>
+				</td>
+				<td>
+					<div id="image">
+				</td>
+			</tr>		
+		</table>
+		
+
+		<script>
+		$(document).ready(function()
+		{
+			var div_data ="";
+			$.ajax({
+				type: "GET",
+				url: "http://csw08724.appspot.com/breeds.ajax",
+				data : {
+					data_id : 'id',
+					data_name : 'name'
+				},
+				dataType: "json",
+				success: function(data) {
+					$.each(data, function(i, obj)
+					{
+						div_data += "<option value="+obj.id+">"+obj.name+"</option>";
+						
+					});
+					$("#Breed").html(div_data);
+				}
+			});
+		});
+		//populating the description and images and other descriptions
+		function onChange()
+		{
+			var id = $("#Breed").val();
+			var htmlStringName = "";
+			var htmlStringDescription = "";
+			var htmlStringOrigins = "";
+			var htmlStringRightForYou = "";
+			var htmlStringImage = "";
+			$.ajax({
+				type: "GET",
+				url: "http://csw08724.appspot.com/breed.ajax?id="+id,
+				data : {
+					data_name : 'name',
+					data_description : 'description',
+					data_origins : 'origins',
+					data_rightForyou : 'rightForYou',
+					data_imageURL : 'imageUrl',
+					data_extraImageUrls : 'extraImageUrls',
+					data_id : 'id'
+				},
+				dataType: "json",
+				success: function(data) 
+					
+					{
+							htmlStringName = data.name;
+							htmlStringDescription = data.description;
+							htmlStringOrigins = data.origins;
+							htmlStringRightForYou = data.rightForYou;
+							htmlStringImage = data.imageUrl;
+						$("#BreedName").html(id);
+						$("#acc-Description").html(htmlStringDescription);
+						$("#acc-Origins").html(htmlStringOrigins);
+						$("#acc-RightForYou").html(htmlStringRightForYou);
+						$("#image").html("<img src =\"http://csw08724.appspot.com/"+htmlStringImage+"\" alt = \"This picture is not available\">");
+						$("#BreedName").html(htmlStringName);
+					
+				}
+			
+		});
+		}
+		</script>
+	</body>
